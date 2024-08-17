@@ -32,6 +32,13 @@ zsh must be present
 ### installation
 
 ```bash
+cd ~/.config
+# Check if the 'ranger' folder exists directly
+if [[ -d "$HOME/.config/ranger" ]]; then
+    echo "The folder 'ranger' exists at $HOME/.config/ranger."
+    tar -czf ranger.bak.tar.gz ranger/ && rm -rf ranger/
+fi
+
 git clone https://github.com/smeisegeier/ranger-config ~/.config/ranger/
 ```
 
