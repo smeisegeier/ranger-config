@@ -216,3 +216,12 @@ class encrypt(Command):
         # Notify completion
         self.fm.notify(f"Encryption of {file_path} completed.")
         self.fm.reload_cwd()
+
+
+class shell(Command):
+    def execute(self):
+        if not self.arg(1):
+            self.fm.notify("Usage: shell <command>", bad=True)
+            return
+        # Source .zshrc and run the command
+        self.fm.run(f'zsh -i -c "source ~/.zshrc && {self.rest(1)} & disown"')
