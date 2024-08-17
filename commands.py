@@ -218,7 +218,7 @@ class encrypt(Command):
         self.fm.reload_cwd()
 
 
-class shell(Command):
+class shell_(Command):
     def execute(self):
         if not self.arg(1):
             self.fm.notify("Usage: shell <command>", bad=True)
