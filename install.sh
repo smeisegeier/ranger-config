@@ -59,7 +59,7 @@ esac
 chmod +x scripts/helper.sh
 source scripts/helper.sh
 
-eval "$install_cmd fzf atool highlight w3m"
+eval "$install_cmd ranger fzf atool highlight w3m"
 
 # Linux-specific tasks: replace ranger commands with Linux-specific ones
 if [[ "$os_name" == "Linux" ]]; then
