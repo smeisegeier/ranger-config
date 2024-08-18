@@ -49,11 +49,13 @@ if [[ -d "$HOME/.config/ranger" ]]; then
 fi
 
 git clone https://github.com/smeisegeier/ranger-config ~/.config/ranger/
-```
 
-```bash
 cd ~/.config/ranger/
 chmod +x install.sh
-chmod +x install-posh.sh
-./install.sh
+```
+
+now the install script can be run
+
+```bash
+$HOME/.config/ranger/install.sh
 ```

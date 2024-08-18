@@ -7,6 +7,25 @@ headline_color='\033[1;36m'  # cyan for headlines
 bold='\033[1m'
 reset='\033[0m'  # reset color
 
+
+# Ask the user if they want to install oh-my-posh
+echo -n "Do you want to install oh-my-posh? (y/[n]): "
+read response
+
+# Convert response to lowercase
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+
+if [[ "$response" == "y" || "$response" == "yes" ]]; then
+    if [ -x "./scripts/install-posh.sh" ]; then
+        ./scripts/install-posh.sh
+    else
+        echo " | -- install-posh.sh not found or not executable."
+    fi
+else
+    echo " | -- skipping oh-my-posh installation."
+fi
+
+
 # determine the os
 os_name=$(uname)
 
@@ -130,4 +149,12 @@ if grep -q "function cdd" "$ZSHRC_PATH"; then
 else
     echo "${yellow} | -- adding function 'cdd' for ranger launch to $ZSHRC_PATH...${reset}"
     echo "$cdd_function" >> "$ZSHRC_PATH"
+fi
+
+
+if ! grep -q "alias lss" "$HOME/.zshrc"; then
+    echo "alias lss='ls -lia --group-directories-first --color=auto'" >> "$HOME/.zshrc"
+fi
+if ! grep -q "alias zshrc" "$HOME/.zshrc"; then
+    echo "alias zshrc='code ~/.zshrc'" >> "$HOME/.zshrc"
 fi
