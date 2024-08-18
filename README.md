@@ -10,11 +10,12 @@
 if nerdfonts are not installed, you might consider installing one like the hack nerd font:
 
 ```bash
+sudo apt install wget fontconfig
+```
+
+```bash
 wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip \
-&& cd ~/.local/share/fonts \
-&& unzip Hack.zip \
-&& rm Hack.zip \
-&& fc-cache -fv
+ && cd ~/.local/share/fonts && unzip Hack.zip && rm *Windows* && rm Hack.zip && fc-cache -fv
 ```
 
 [![windows](https://badgen.net/badge/icon/windows?icon=windows&label)](https://microsoft.com/windows/)
@@ -53,5 +54,6 @@ git clone https://github.com/smeisegeier/ranger-config ~/.config/ranger/
 ```bash
 cd ~/.config/ranger/
 chmod +x install.sh
+chmod +x install-posh.sh
 ./install.sh
 ```

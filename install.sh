@@ -12,10 +12,10 @@ os_name=$(uname)
 
 # set package manager based on os
 if [[ "$os_name" == "Darwin" ]]; then
-    echo "found macos. using homebrew (brew) for package installation."
+    echo "${bold}${headline_color}found macos. using homebrew (brew) for package installation.${reset}"
     package_manager="brew"
 else
-    echo "found linux. using apt for package installation."
+    echo "${bold}${headline_color}found linux. using apt for package installation.${reset}"
     package_manager="sudo apt"
 fi
 
