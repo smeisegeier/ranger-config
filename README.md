@@ -6,8 +6,16 @@
 
 ### prerequisites
 
-all os
-nerdfonts
+**all os**
+if nerdfonts are not installed, you might consider installing one like the hack nerd font:
+
+```bash
+wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip \
+&& cd ~/.local/share/fonts \
+&& unzip Hack.zip \
+&& rm Hack.zip \
+&& fc-cache -fv
+```
 
 [![windows](https://badgen.net/badge/icon/windows?icon=windows&label)](https://microsoft.com/windows/)
 ranger can be run on WSL2
@@ -31,12 +39,12 @@ zsh must be present
 
 ### installation
 
-Check if the 'ranger' folder exists, create backup
+🚨 check if the 'ranger' folder exists. if so - create backup as `.zip` file of previous folder. no data is lost!
 
 ```bash
 cd ~/.config
 if [[ -d "$HOME/.config/ranger" ]]; then
-    tar -czf ranger.bak.tar.gz ranger/ && rm -rf ranger/
+    zip -r ranger.zip ranger && rm -rf ranger/
 fi
 
 git clone https://github.com/smeisegeier/ranger-config ~/.config/ranger/
