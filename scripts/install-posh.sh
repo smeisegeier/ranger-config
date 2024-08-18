@@ -14,6 +14,9 @@ theme_file="$HOME/powerlevel10k_rainbow.omp.json"
 if grep -q "oh-my-posh init zsh" "$HOME/.zshrc"; then
     echo "oh-my-posh is already initialized in $HOME/.zshrc"
 else
+    echo "Initializing oh-my-posh..."
+    curl -s https://ohmyposh.dev/install.sh | bash -s
+
     # Download the theme file only if it does not exist
     if [ ! -f "$theme_file" ]; then
         echo "Downloading theme file..."
