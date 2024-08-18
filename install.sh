@@ -1,12 +1,11 @@
 #!/bin/zsh
 
-# color codes
+# Color codes
 green='\033[0;32m'
 yellow='\033[1;33m'
 headline_color='\033[1;36m'  # cyan for headlines
 bold='\033[1m'
 reset='\033[0m'  # reset color
-
 
 # Ask the user if they want to install oh-my-posh
 echo -n "Do you want to install oh-my-posh? (y/[n]): "
@@ -19,88 +18,110 @@ if [[ "$response" == "y" || "$response" == "yes" ]]; then
     if [ -x "./scripts/install-posh.sh" ]; then
         ./scripts/install-posh.sh
     else
-        echo " | -- install-posh.sh not found or not executable."
+        echo "${yellow} | -- install-posh.sh not found or not executable.${reset}"
     fi
 else
-    echo " | -- skipping oh-my-posh installation."
+    echo "${green} | -- skipping oh-my-posh installation.${reset}"
 fi
 
-
-# determine the os
+# Determine the OS
 os_name=$(uname)
 
-# set package manager based on os
-if [[ "$os_name" == "Darwin" ]]; then
-    echo "${bold}${headline_color}found macos. using homebrew (brew) for package installation.${reset}"
-    package_manager="brew"
-else
-    echo "${bold}${headline_color}found linux. using apt for package installation.${reset}"
-    package_manager="sudo apt"
-fi
+# Set commands based on OS
+case "$os_name" in
+    Darwin)
+        echo "${bold}${headline_color}Found macOS. Using Homebrew (brew) for package installation.${reset}"
+        update_cmd="brew update"
+        install_cmd="brew install"
+        install_cmd_cask="brew install --cask"
+        ;;
+    Linux)
+        # Check if Fedora or another Linux distro
+        if command -v dnf > /dev/null 2>&1; then
+            echo "${bold}${headline_color}Found Fedora. Using DNF for package installation.${reset}"
+            update_cmd="sudo dnf update -y"
+            install_cmd="sudo dnf install -y"
+        elif command -v apt > /dev/null 2>&1; then
+            echo "${bold}${headline_color}Found Ubuntu. Using APT for package installation.${reset}"
+            update_cmd="sudo apt update"
+            install_cmd="sudo apt install -y"
+        else
+            echo "${yellow} | -- Unsupported Linux distribution.${reset}"
+            exit 1
+        fi
+        ;;
+    *)
+        echo "${yellow} | -- Unsupported OS: $os_name.${reset}"
+        exit 1
+        ;;
+esac
 
 chmod +x scripts/helper.sh
 source scripts/helper.sh
 
-# linux-specific tasks: replace ranger commands with linux specific ones
+eval "$install_cmd fzf atool highlight w3m"
+
+# Linux-specific tasks: replace ranger commands with Linux-specific ones
 if [[ "$os_name" == "Linux" ]]; then
     replace_string_in_file rc.conf "du -d 3 -h" "du --max-depth=1 -h --apparent-size"
 fi
 
-# function to check if visual studio code (code) is installed
+# Function to check if Visual Studio Code (code) is installed
 is_code_installed() {
     command -v code > /dev/null 2>&1
 }
 
-# function to check if the codeium extension is installed in vs code
+# Function to check if the Codeium extension is installed in VS Code
 is_codium_installed() {
     command -v codium > /dev/null 2>&1
 }
 
-echo "${bold}${headline_color}checking if visual studio code (code) or codium is installed...${reset}"
+echo "${bold}${headline_color}Checking if Visual Studio Code (code) or Codium is installed...${reset}"
 
-# check both conditions and print results
+# Check both conditions and print results
 if ! is_code_installed && ! is_codium_installed; then
-    echo "${yellow} | -- neither visual studio code (code) nor the codeium extension is installed.${reset}"
-    echo " | -- installing visual studio code..."
+    echo "${yellow} | -- Neither Visual Studio Code (code) nor the Codeium extension is installed.${reset}"
+    echo " | -- Installing Visual Studio Code..."
 
-    # update package list and install dependencies
-    echo " | -- updating package list..."
-    if [[ "$package_manager" == "sudo apt" ]]; then
-        sudo apt update
-    fi
+    # Update package list and install dependencies
+    echo " | -- Updating package list..."
+    eval "$update_cmd"
 
-    echo " | -- installing dependencies..."
-    $package_manager install -y software-properties-common apt-transport-https wget
+    echo " | -- Installing dependencies..."
+    eval "$install_cmd software-properties-common apt-transport-https wget"
 
-    # macos-specific tasks
-    if [[ "$package_manager" == "brew" ]]; then
-        echo " | -- installing vscodium using homebrew..."
-        brew install --cask vscodium
+    # Install VSCodium
+    if [[ "$os_name" == "Darwin" ]]; then
+        echo " | -- Installing VSCodium using Homebrew..."
+        eval "$install_cmd_cask vscodium"
+    elif [[ "$os_name" == "Linux" && $(command -v dnf) ]]; then
+        echo " | -- Installing VSCodium using DNF..."
+        eval "$install_cmd vscodium"
     else
-        echo " | -- adding vscodium repository key..."
+        echo " | -- Adding VSCodium repository key..."
         sudo wget https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg -O /usr/share/keyrings/vscodium-archive-keyring.asc
 
-        echo " | -- adding vscodium repository to sources list..."
+        echo " | -- Adding VSCodium repository to sources list..."
         echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.asc ] https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
 
-        # update package list again
-        echo " | -- updating package list again..."
-        sudo apt update
+        # Update package list again
+        echo " | -- Updating package list again..."
+        eval "$update_cmd"
 
-        # install visual studio code
-        echo " | -- installing vscodium..."
-        sudo apt install -y codium
+        # Install VSCodium
+        echo " | -- Installing VSCodium..."
+        eval "$install_cmd codium"
     fi
 else
-    echo "${green} | -- at least one of visual studio code (code) or codium is already installed.${reset}"
+    echo "${green} | -- At least one of Visual Studio Code (code) or Codium is already installed.${reset}"
 fi
 
-# path to the .zshrc file
+# Path to the .zshrc file
 ZSHRC_PATH="$HOME/.zshrc"
 
-echo "${bold}${headline_color}checking if $ZSHRC_PATH exists...${reset}"
+echo "${bold}${headline_color}Checking if $ZSHRC_PATH exists...${reset}"
 
-# check if .zshrc exists
+# Check if .zshrc exists
 if [ -f "$ZSHRC_PATH" ]; then
     echo "${green} | -- $ZSHRC_PATH already exists, no change${reset}"
 else
@@ -108,22 +129,22 @@ else
     touch $ZSHRC_PATH
 fi
 
-echo "${bold}${headline_color}ensure the correct code / codium alias is present in .zshrc${reset}"
+echo "${bold}${headline_color}Ensure the correct code / codium alias is present in .zshrc${reset}"
 
-# check for alias in .zshrc
+# Check for alias in .zshrc
 if ! is_code_installed && is_codium_installed ; then
-    echo " | -- codium is installed, code is not. checking for alias.."
+    echo " | -- Codium is installed, code is not. Checking for alias..."
     if grep -q "alias code=codium" "$ZSHRC_PATH"; then
-        echo "${green} | -- alias 'code=codium' already present in $ZSHRC_PATH.${reset}"
+        echo "${green} | -- Alias 'code=codium' already present in $ZSHRC_PATH.${reset}"
     else
-        echo "${yellow} | -- adding alias 'code=codium' to $ZSHRC_PATH...${reset}"
+        echo "${yellow} | -- Adding alias 'code=codium' to $ZSHRC_PATH...${reset}"
         echo "alias code=codium" >> "$ZSHRC_PATH"
     fi
 else
-    echo "${green} | -- no need to add codium alias${reset}"
+    echo "${green} | -- No need to add Codium alias${reset}"
 fi
 
-# define the function to be added to .zshrc
+# Define the function to be added to .zshrc
 cdd_function='
 function cdd {
     local IFS=$'"'\t\n'"'
@@ -141,20 +162,22 @@ function cdd {
     command rm -f -- "$tempfile" 2>/dev/null
 }
 '
-echo "${bold}${headline_color}ensure the correct cdd function for ranger launch is present in .zshrc${reset}"
+echo "${bold}${headline_color}Ensure the correct cdd function for ranger launch is present in .zshrc${reset}"
 
-# check for function in .zshrc
+# Check for function in .zshrc
 if grep -q "function cdd" "$ZSHRC_PATH"; then
-    echo "${green} | -- function already present in $ZSHRC_PATH.${reset}"
+    echo "${green} | -- Function already present in $ZSHRC_PATH.${reset}"
 else
-    echo "${yellow} | -- adding function 'cdd' for ranger launch to $ZSHRC_PATH...${reset}"
+    echo "${yellow} | -- Adding function 'cdd' for ranger launch to $ZSHRC_PATH...${reset}"
     echo "$cdd_function" >> "$ZSHRC_PATH"
 fi
 
-
+# Add aliases to .zshrc if not already present
 if ! grep -q "alias lss" "$HOME/.zshrc"; then
     echo "alias lss='ls -lia --group-directories-first --color=auto'" >> "$HOME/.zshrc"
 fi
 if ! grep -q "alias zshrc" "$HOME/.zshrc"; then
     echo "alias zshrc='code ~/.zshrc'" >> "$HOME/.zshrc"
 fi
+
+exec zsh

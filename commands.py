@@ -144,6 +144,7 @@ class decrypt(Command):
         else:
             self.fm.notify("The selected file is not a .gpg file", bad=True)
 
+
 class zip_selection(Command):
     def execute(self):
         # Get the currently selected files or directories
@@ -153,24 +154,17 @@ class zip_selection(Command):
             self.fm.notify("No files selected!", bad=True)
             return
 
-        # Create a zip file name
-        # If the selection includes directories, use the name of the first directory for the zip file
-        include_dirs = any(file.is_directory for file in selected_files)
-        if include_dirs:
-            dir_name = next(file.basename for file in selected_files if file.is_directory)
-            zip_file_name = f"{dir_name}.zip"
-        else:
-            zip_file_name = "archive.zip"
+        # Determine the zip file name based on the first directory or fallback to "archive.zip"
+        zip_file_name = next((file.basename for file in selected_files if file.is_directory), "archive") + ".zip"
 
-        # Get the current directory to use as the base for relative paths
+        # Get the current directory path
         current_dir = self.fm.thisdir.path
 
-        # Create a list of relative paths to zip
-        paths_to_zip = [file.path[len(current_dir)+1:] for file in selected_files]
+        # Create a list of relative paths to zip, with proper quoting
+        paths_to_zip = [f"'{file.relative_path}'" for file in selected_files]
 
-        # Command to create a zip file
-        # Use the base directory path for the zip command
-        command = f"cd '{current_dir}' && zip -r '{zip_file_name}' {' '.join(paths_to_zip)}"
+        # Form the command to create the zip archive without including the root directory
+        command = f"cd '{current_dir}' && zip -r '{zip_file_name}' {' '.join(paths_to_zip)} -x '*/*'"
 
         # Execute the command
         self.fm.run(command, shell=True)

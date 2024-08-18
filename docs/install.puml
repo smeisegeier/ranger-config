@@ -1,0 +1,94 @@
+@startuml
+title Script Activity Diagram
+
+start
+
+:Ask user if they want to install oh-my-posh;
+if (User wants to install oh-my-posh?) then (yes)
+    :Check if install-posh.sh exists;
+    if (install-posh.sh exists?) then (yes)
+        :Run install-posh.sh;
+    else (no)
+        :Handle missing install-posh.sh;
+    endif
+else (no)
+    :Skip oh-my-posh installation;
+endif
+
+:Determine the OS;
+if (OS is macOS?) then (yes)
+    :Set package manager to Homebrew (brew);
+else (no)
+    if (OS is Linux?) then (yes)
+        :Check if package manager is dnf or apt;
+        if (Using dnf?) then (yes)
+            :Set package manager to DNF;
+        else (no)
+            :Set package manager to APT;
+        endif
+    else (no)
+        :Handle unsupported OS;
+        stop
+    endif
+endif
+
+:Make scripts/helper.sh executable;
+:Source scripts/helper.sh;
+
+if (OS is Linux?) then (yes)
+    :Replace ranger commands with Linux-specific ones;
+endif
+
+:Check if Visual Studio Code (code) or Codium is installed;
+if (Neither Visual Studio Code (code) nor Codium is installed?) then (yes)
+    :Update package list;
+    :Install dependencies;
+    if (OS is macOS?) then (yes)
+        :Install VSCodium using Homebrew;
+    else (no)
+        if (OS is Fedora?) then (yes)
+            :Install VSCodium using DNF;
+        else (no)
+            :Add VSCodium repository key and sources list;
+            :Update package list again;
+            :Install VSCodium;
+        endif
+    endif
+else (no)
+    :Skip VSCodium installation;
+endif
+
+:Check if $HOME/.zshrc exists;
+if (.zshrc exists?) then (yes)
+    :Handle existing .zshrc;
+else (no)
+    :Create $HOME/.zshrc;
+endif
+
+:Ensure correct code / codium alias is present in .zshrc;
+if (Codium is installed and code is not?) then (yes)
+    :Check for alias in .zshrc;
+    if (Alias 'code=codium' present?) then (yes)
+        :Handle existing alias;
+    else (no)
+        :Add alias 'code=codium' to .zshrc;
+    endif
+else (no)
+    :Skip Codium alias addition;
+endif
+
+:Define 'cdd' function for ranger launch;
+:Check for function in .zshrc;
+if (Function 'cdd' present?) then (yes)
+    :Handle existing function;
+else (no)
+    :Add function 'cdd' to .zshrc;
+endif
+
+:Add aliases to .zshrc if not already present;
+
+:Start new zsh session;
+
+stop
+
+@enduml
