@@ -96,7 +96,11 @@ if ! is_code_installed && ! is_codium_installed; then
         eval "$install_cmd_cask vscodium"
     elif [[ "$os_name" == "Linux" && $(command -v dnf) ]]; then
         echo " | -- Installing VSCodium using DNF..."
-        eval "$install_cmd vscodium"
+        sudo rpmkeys --import https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/-/raw/master/pub.gpg
+    
+        printf "[gitlab.com_paulcarroty_vscodium_repo]\nname=download.vscodium.com\nbaseurl=https://download.vscodium.com/rpms/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/-/raw/master/pub.gpg\nmetadata_expire=1h" | sudo tee -a /etc/yum.repos.d/vscodium.repo
+
+        eval "$install_cmd codium"
     else
         echo " | -- Adding VSCodium repository key..."
         sudo wget https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg -O /usr/share/keyrings/vscodium-archive-keyring.asc
