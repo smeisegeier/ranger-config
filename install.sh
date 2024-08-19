@@ -59,7 +59,7 @@ esac
 chmod +x scripts/helper.sh
 source scripts/helper.sh
 
-eval "$install_cmd ranger fzf atool highlight w3m"
+eval "$install_cmd ranger fzf atool highlight w3m zip bat"
 
 # Linux-specific tasks: replace ranger commands with Linux-specific ones
 if [[ "$os_name" == "Linux" ]]; then
@@ -131,6 +131,12 @@ if [ -f "$ZSHRC_PATH" ]; then
 else
     echo "${yellow} | -- $ZSHRC_PATH does not exist, creating it...${reset}"
     touch $ZSHRC_PATH
+fi
+
+
+# add extra path ~/.local/bin
+if ! grep -q "export PATH=$PATH:$HOME/.local/bin" "$ZSHRC_PATH"; then
+    echo "export PATH=$PATH:$HOME/.local/bin" >> "$ZSHRC_PATH"
 fi
 
 echo "${bold}${headline_color}Ensure the correct code / codium alias is present in .zshrc${reset}"

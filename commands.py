@@ -219,3 +219,26 @@ class shell_(Command):
             return
         # Source .zshrc and run the command
         self.fm.run(f'zsh -i -c "source ~/.zshrc && {self.rest(1)} & disown"')
+
+
+class mount_drive(Command):
+    def execute(self):
+        # Prompt the user for the drive letter
+        self.fm.ui.console.ask("Enter the windows drive letter to mount (e.g., G): ", self._mount_drive)
+
+    def _mount_drive(self, letter):
+        # Clean and validate the user input
+        letter = letter.strip().upper()
+
+        if len(letter) != 1 or not letter.isalpha():
+            self.fm.notify("Invalid drive letter!", bad=True)
+            return
+
+        # Construct the mount command
+        command = f"sudo mount -t drvfs {letter}: /mnt/{letter.lower()}"
+
+        # Execute the command
+        self.fm.run(command, shell=True)
+
+        # Notify the user of the completed mount
+        self.fm.notify(f"Mounted {letter}: to /mnt/{letter.lower()}", bad=False)

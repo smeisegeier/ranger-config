@@ -1,94 +1,85 @@
-@startuml
-title Script Activity Diagram
+@startuml ranger-config-installation-script
+skinparam backgroundColor #2E2E2E
+skinparam shadowing false
+skinparam defaultFontColor #F0F0F0
+skinparam activityBackgroundColor #3A3A3A
+skinparam activityBorderColor #555555
+skinparam arrowColor #CCCCCC
+skinparam swimlaneBackgroundColor #444444
+
+title <color:#F0F0F0>ranger-config-installation-script</color>
 
 start
 
-:Ask user if they want to install oh-my-posh;
-if (User wants to install oh-my-posh?) then (yes)
-    :Check if install-posh.sh exists;
-    if (install-posh.sh exists?) then (yes)
-        :Run install-posh.sh;
-    else (no)
-        :Handle missing install-posh.sh;
-    endif
-else (no)
-    :Skip oh-my-posh installation;
-endif
+    :Ask if the user wants to install oh-my-posh;
+    :Read user input;
 
-:Determine the OS;
-if (OS is macOS?) then (yes)
-    :Set package manager to Homebrew (brew);
-else (no)
+    if (Response is 'yes' or 'y'?) then (yes)
+        if (install-posh.sh exists and is executable?) then (yes)
+            :Run ./scripts/install-posh.sh;
+        else (no)
+            :<color:#FFD700>Notify "install-posh.sh not found or not executable"</color>;
+        endif
+    else (no)
+        :<color:#00FF00>Notify "Skipping oh-my-posh installation"</color>;
+    endif
+
+    :Determine the OS (uname);
+    switch (OS type)
+        case (macOS)
+            :Set update and install commands using Homebrew;
+        case (Linux)
+            if (Fedora detected?) then (yes)
+                :Set update and install commands using DNF;
+            else if (Ubuntu detected?) then (yes)
+                :Set update and install commands using APT;
+            else (Unsupported Linux)
+                :<color:#FFD700>Notify "Unsupported Linux distribution"</color>;
+                stop
+            endif
+        case (Other OS)
+            :<color:#FFD700>Notify "Unsupported OS"</color>;
+            stop
+    endswitch
+
+    :Grant execution permission to scripts/helper.sh;
+    :Source scripts/helper.sh;
+    :Run package installation (ranger, fzf, atool, etc.);
+
     if (OS is Linux?) then (yes)
-        :Check if package manager is dnf or apt;
-        if (Using dnf?) then (yes)
-            :Set package manager to DNF;
-        else (no)
-            :Set package manager to APT;
+        :Replace ranger commands with Linux-specific ones;
+    endif
+
+    :Check if Visual Studio Code (code) or Codium is installed;
+    if (Neither code nor Codium is installed?) then (yes)
+        :Update package list and install dependencies;
+        if (OS is macOS?) then (yes)
+            :Install VSCodium using Homebrew;
+        else if (Fedora detected?) then (yes)
+            :Add VSCodium repository and install with DNF;
+        else (Ubuntu or Debian-based)
+            :Add VSCodium repository and install with APT;
         endif
     else (no)
-        :Handle unsupported OS;
-        stop
+        :<color:#00FF00>Notify "At least one of Visual Studio Code or Codium is already installed"</color>;
     endif
-endif
 
-:Make scripts/helper.sh executable;
-:Source scripts/helper.sh;
-
-if (OS is Linux?) then (yes)
-    :Replace ranger commands with Linux-specific ones;
-endif
-
-:Check if Visual Studio Code (code) or Codium is installed;
-if (Neither Visual Studio Code (code) nor Codium is installed?) then (yes)
-    :Update package list;
-    :Install dependencies;
-    if (OS is macOS?) then (yes)
-        :Install VSCodium using Homebrew;
+    :Check if .zshrc exists;
+    if (.zshrc exists?) then (yes)
+        :<color:#00FF00>Notify ".zshrc already exists"</color>;
     else (no)
-        if (OS is Fedora?) then (yes)
-            :Install VSCodium using DNF;
-        else (no)
-            :Add VSCodium repository key and sources list;
-            :Update package list again;
-            :Install VSCodium;
-        endif
+        :Create .zshrc file;
     endif
-else (no)
-    :Skip VSCodium installation;
-endif
 
-:Check if $HOME/.zshrc exists;
-if (.zshrc exists?) then (yes)
-    :Handle existing .zshrc;
-else (no)
-    :Create $HOME/.zshrc;
-endif
+    :Ensure ~/.local/bin is added to PATH;
 
-:Ensure correct code / codium alias is present in .zshrc;
-if (Codium is installed and code is not?) then (yes)
-    :Check for alias in .zshrc;
-    if (Alias 'code=codium' present?) then (yes)
-        :Handle existing alias;
-    else (no)
-        :Add alias 'code=codium' to .zshrc;
+    if (Codium is installed and code is not?) then (yes)
+        :Check and add alias 'code=codium' to .zshrc;
     endif
-else (no)
-    :Skip Codium alias addition;
-endif
 
-:Define 'cdd' function for ranger launch;
-:Check for function in .zshrc;
-if (Function 'cdd' present?) then (yes)
-    :Handle existing function;
-else (no)
-    :Add function 'cdd' to .zshrc;
-endif
-
-:Add aliases to .zshrc if not already present;
-
-:Start new zsh session;
-
+    :Ensure cdd function for ranger launch is present in .zshrc;
+    :Ensure ls and zshrc aliases are present in .zshrc;
+    :Reload zsh;
 stop
 
 @enduml
