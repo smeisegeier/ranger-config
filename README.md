@@ -81,7 +81,7 @@ this installation uses the great [ranger-devicons2](https://github.com/cdump/ran
   - `<enter>` to open with assigned program
   - `kw` to use wget
   - `ke` to execute shell script in ranger
-  - kd to mount a drive letter in WSL _(⚠️ experimental)_
+  - `kd` to mount a drive letter in WSL _(⚠️ experimental)_
 - filter and select files
   - `zf` -> filter str
   - `v` to select all files (toggle)
@@ -135,191 +135,166 @@ this installation uses the great [ranger-devicons2](https://github.com/cdump/ran
   - `kce` to encrypt using keyring, choosing recipient
 
 ### all keys
+### All Keys
 
-| Key   | Meaning                 |
-|-------|-------------------------|
-| `Q`   | quitall!                |
-| `q`   | quit _(in zsh: cd into last dir)_ |
-| `F`   | set freeze_files!       |
-| `~`   | set viewmode! (1 or 3 pane)          |
-| `i`   | display_file            |
-| `?`   | help                    |
-| `W`   | display_log             |
-| `w`   | taskview_open           |
-| `:`   | console                 |
-| `!`   | console shell%space     |
+| Key     | Meaning                                      | Comment                                        |
+|---------|----------------------------------------------|------------------------------------------------|
+| `Q`     | quitall!                                     |                                                |
+| `q`     | quit _(in zsh: cd into last dir)_            |                                                |
+| `F`     | set freeze_files!                            |                                                |
+| `~`     | set viewmode! (1 or 3 pane)                  |                                                |
+| `i`     | display_file                                 |                                                |
+| `?`     | help                                         |                                                |
+| `W`     | display_log                                  |                                                |
+| `w`     | taskview_open                                | View task list                                 |
+| `:`     | console                                      |                                                |
+| `!`     | console shell%space                          |                                                |
 
-**Change the line mode**
+### Change the Line Mode
 
-| Key   | Meaning                      |
-|-------|------------------------------|
-| `lf`  | linemode filename            |
-| `li`  | linemode fileinfo            |
-| `lm`  | linemode mtime               |
-| `lp`  | linemode permissions         |
-| `ls`  | linemode sizemtime           |
-| `lh`  | linemode sizehumanreadablemtime |
-| `lt`  | linemode metatitle           |
-| `ld`  | linemode devicons            |
+| Key   | Meaning                      | Comment                        |
+|-------|------------------------------|--------------------------------|
+| `lf`  | linemode filename            |                                |
+| `li`  | linemode fileinfo            |                                |
+| `lm`  | linemode mtime               |                                |
+| `lp`  | linemode permissions         |                                |
+| `ls`  | linemode sizemtime           |                                |
+| `lh`  | linemode sizehumanreadablemtime |                                |
+| `lt`  | linemode metatitle           |                                |
+| `ld`  | linemode devicons            |                                |
 
-**Tagging / Marking**
+### Tagging / Marking
 
 - 1 letter (#)tags for grouping files
 - 1 letter (m)arks for (b)link targets
 
-| Key       | Meaning                    |
-|-----------|----------------------------|
-| `#<any>`  | tag_toggle tag=%any        |
-| `ut`      | tag_remove                 |
-| `<Space>` | mark_files toggle=True     |
-| `v`       | mark_files all=True toggle=True |
-| `uv`      | mark_files all=True val=False |
-| `V`       | toggle_visual_mode         |
-| `uV`      | toggle_visual_mode reverse=True |
-| `m`      | add bookmark |
-| `b`      | blink to bookmark |
-| `um`      | unset bookmark |
+| Key       | Meaning                    | Comment                        |
+|-----------|----------------------------|--------------------------------|
+| `#<any>`  | tag_toggle tag=%any        |                                |
+| `ut`      | tag_remove                 |                                |
+| `<Space>` | mark_files toggle=True     |                                |
+| `v`       | mark_files all=True toggle=True | Select all files (toggle)   |
+| `uv`      | mark_files all=True val=False | Unselect all files          |
+| `V`       | toggle_visual_mode         |                                |
+| `uV`      | toggle_visual_mode reverse=True |                                |
+| `m`       | add bookmark               | Register a bookmark            |
+| `b`       | blink to bookmark          | Jump to a registered bookmark  |
+| `um`      | unset bookmark             |                                |
 
-**Jumping around**
+### Jumping Around
 
-| Key   | Meaning                |
-|-------|------------------------|
-| `h`   | history_go -1          |
-| `j`   | history_go 1           |
-| `gh`  | cd ~                   |
-| `gt`  | cd ~/tmp               |
-| `gr`  | cd /                   |
-| `gg`  | cd ~/repos/github      |
-| `cd`  | console cd%space        |
+| Key   | Meaning                | Comment                        |
+|-------|------------------------|--------------------------------|
+| `h`   | history_go -1          |                                |
+| `j`   | history_go 1           |                                |
+| `gh`  | cd ~                   |                                |
+| `gt`  | cd ~/tmp               |                                |
+| `gr`  | cd /                   |                                |
+| `gg`  | cd ~/repos/github      |                                |
+| `cd`  | console cd%space       |                                |
 
-**Copy / Paste**
+### Copy / Paste
 
-| Key       | Meaning                          |
-|-----------|----------------------------------|
-| `dd`      | cut                              |
-| `ud`      | uncut                            |
-| `yy`      | copy                             |
-| `ya`      | copy mode=add                    |
-| `yr`      | copy mode=remove                 |
-| `yt`      | copy mode=toggle                 |
-| `yp`  | yank path                        |
-| `yd`  | yank dir                         |
-| `yn`  | yank name                        |
-| `y.`  | yank name_without_extension      |
-| `pp`      | paste                            |
-| `po`      | paste overwrite=True             |
-| `pP`      | paste append=True                |
-| `pO`      | paste overwrite=True append=True |
-| `pl`      | paste_symlink relative=False     |
-| `pL`      | paste_symlink relative=True      |
-| `pl`     | paste_hardlink                   |
-| `pd`      | console paste dest=              |
+| Key       | Meaning                          | Comment                        |
+|-----------|----------------------------------|--------------------------------|
+| `dd`      | cut                              |                                |
+| `ud`      | uncut                            |                                |
+| `yy`      | copy                             |                                |
+| `ya`      | copy mode=add                    |                                |
+| `yr`      | copy mode=remove                 |                                |
+| `yt`      | copy mode=toggle                 |                                |
+| `yp`      | yank path                        | Copy file path                 |
+| `yd`      | yank dir                         |                                |
+| `yn`      | yank name                        | Copy filename                  |
+| `y.`      | yank name_without_extension      |                                |
+| `pp`      | paste                            |                                |
+| `po`      | paste overwrite=True             |                                |
+| `pP`      | paste append=True                |                                |
+| `pO`      | paste overwrite=True append=True |                                |
+| `pl`      | paste_symlink relative=False     |                                |
+| `pL`      | paste_symlink relative=True      |                                |
+| `pl`      | paste_hardlink                   |                                |
+| `pd`      | console paste dest=              |                                |
 
-**Filesystem Operations**
+### Filesystem Operations
 
-| Key       | Meaning                          |
-|-----------|----------------------------------|
-| `=`       | chmod                            |
-| `kk`      | open_with code                   |
-| `kt`      | console touch%space              |
-| `km`      | console mkdir%space              |
-| `kf`      | open on finder (macos)            |
-| `kr`      | rename_append                    |
-| `kz`      | zip selection                    |
-| `ku`      | unzip selection                    |
-| `kw`      | wget selection                    |
-| `kcd`      | decrypt file                    |
-| `kce`      | encrypt file                    |
-| `F2`      | rename_append                    |
-| `kr`      | rename_append                    |
-| `dD`      | console delete                   |
-| `x`      | console trash                    |
-| `du`  | shell -p du -d 1 -h -c |
+| Key       | Meaning                          | Comment                        |
+|-----------|----------------------------------|--------------------------------|
+| `=`       | chmod                            |                                |
+| `kk`      | open_with code                   | Open file in code              |
+| `kt`      | console touch%space              |                                |
+| `km`      | console mkdir%space              |                                |
+| `kf`      | open on finder (macos)           | Open in Finder (macOS)         |
+| `kr`      | rename_append                    |                                |
+| `kz`      | zip selection                    | Zip files, optional: give dir name |
+| `ku`      | unzip selection                  | Unzip files, optional: give dir name |
+| `kw`      | wget selection                   | Use wget                       |
+| `kcd`     | decrypt file                     | Decrypt using keyring          |
+| `kce`     | encrypt file                     | Encrypt using keyring, choosing recipient |
+| `F2`      | rename_append                    |                                |
+| `kr`      | rename_append                    |                                |
+| `dD`      | console delete                   |                                |
+| `x`       | console trash                    |                                |
+| `du`      | shell -p du -d 1 -h -c           |                                |
 
-**Search vs Find**
+### Search vs Find
 
-| Key   | Meaning                |
-|-------|------------------------|
-| `ff`   | console search%space      |
-| `fz`   | fuzzy search fzf      |
-| `n`   | search_next            |
-| `N`   | search_next forward=False |
-| `ct`  | search_next order=tag  |
-| `cs`  | search_next order=size |
-| `ci`  | search_next order=mimetype |
-| `cc`  | search_next order=ctime |
-| `cm`  | search_next order=mtime |
-| `ca`  | search_next order=atime |
+| Key   | Meaning                | Comment                        |
+|-------|------------------------|--------------------------------|
+| `ff`  | console search%space   | Find files with a search term  |
+| `fz`  | fuzzy search fzf       | Use fuzzy search               |
+| `n`   | search_next            |                                |
+| `N`   | search_next forward=False |                                |
+| `ct`  | search_next order=tag  |                                |
+| `cs`  | search_next order=size |                                |
+| `ci`  | search_next order=mimetype |                                |
+| `cc`  | search_next order=ctime |                                |
+| `cm`  | search_next order=mtime |                                |
+| `ca`  | search_next order=atime |                                |
 
-**Tabs**
+### Tabs
 
-| Key   | Meaning                |
-|-------|------------------------|
-| `t+`  | tab_new                |
-| `t-`  | tab_close              |
-| `t1`  | tab_open 1             |
-| `t2`  | tab_open 2             |
-| `t3`  | tab_open 3             |
-| `t4`  | tab_open 4             |
+| Key   | Meaning                | Comment                        |
+|-------|------------------------|--------------------------------|
+| `t+`  | tab_new                |                                |
+| `t-`  | tab_close              |                                |
+| `t1`  | tab_open 1             |                                |
+| `t2`  | tab_open 2             | Create and jump to a new tab   |
+| `t3`  | tab_open 3             |                                |
+| `t4`  | tab_open 4             |                                |
 
-**Sorting**
+### Sorting
 
-| Key   | Meaning                                         |
-|-------|-------------------------------------------------|
-| `on`  | chain set sort=natural; set sort_reverse=False  |
-| `or`  | set sort_reverse!                               |
-| `os`  | chain set sort=size; set sort_reverse=False     |
-| `ob`  | chain set sort=basename; set sort_reverse=False |
-| `om`  | chain set sort=mtime; set sort_reverse=False    |
-| `oc`  | chain set sort=ctime; set sort_reverse=False    |
-| `oa`  | chain set sort=atime; set sort_reverse=False    |
-| `ot`  | chain set sort=type; set sort_reverse=False     |
-| `oe`  | chain set sort=extension; set sort_reverse=False|
-| `oS`  | chain set sort=size; set sort_reverse=True      |
-| `oB`  | chain set sort=basename; set sort_reverse=True  |
-| `oN`  | chain set sort=natural; set sort_reverse=True   |
-| `oM`  | chain set sort=mtime; set sort_reverse=True     |
-| `oC`  | chain set sort=ctime; set sort_reverse=True     |
-| `oA`  | chain set sort=atime; set sort_reverse=True     |
-| `oT`  | chain set sort=type; set sort_reverse=True      |
-| `oE`  | chain set sort=extension; set sort_reverse=True |
+| Key   | Meaning                                         | Comment                        |
+|-------|-------------------------------------------------|--------------------------------|
+| `on`  | chain set sort=natural; set sort_reverse=False  |                                |
+| `or`  | set sort_reverse!                               |                                |
+| `os`  | chain set sort=size; set sort_reverse=False     | Sort by size                   |
+| `ob`  | chain set sort=basename; set sort_reverse=False |                                |
+| `om`  | chain set sort=mtime; set sort_reverse=False    | Sort by modified date          |
+| `oc`  | chain set sort=ctime; set sort_reverse=False    |                                |
+| `oa`  | chain set sort=atime; set sort_reverse=False    |                                |
+| `ot`  | chain set sort=type; set sort_reverse=False     |                                |
+| `oe`  | chain set sort=extension; set sort_reverse=False|                                |
+| `oS`  | chain set sort=size; set sort_reverse=True      |                                |
+| `oB`  | chain set sort=basename; set sort_reverse=True  |                                |
+| `oN`  | chain set sort=natural; set sort_reverse=True   |                                |
+| `oM`  | chain set sort=mtime; set sort_reverse=True     |                                |
+| `oC`  | chain set sort=ctime; set sort_reverse=True     |                                |
+| `oA`  | chain set sort=atime; set sort_reverse=True     |                                |
+| `oT`  | chain set sort=type; set sort_reverse=True      |                                |
+| `oE`  | chain set sort=extension; set sort_reverse=True |                                |
 
-**Settings**
+### Settings
 
-| Key    | Meaning                       |
-|--------|-------------------------------|
-| `zf`   | console filter%space          |
-| `zp`   | set preview_files!            |
-| `zi`   | set preview_images!           |
-| `zc`   | set collapse_preview!         |
-| `zd`   | set sort_directories_first!   |
-| `zh`   | set show_hidden!              |
-| `zI`   | set flushinput!               |
-| `zm`   | set mouse_enabled!            |
-| `zP`   | set preview_directories!      |
-| `zs`   | set sort_case_insensitive!    |
-| `zu`   | set autoupdate_cumulative_size! |
-| `zv`   | set use_preview_script!       |
-
-**Filter stack**
-
-| Key   | Meaning                        |
-|-------|--------------------------------|
-| `.d`  | filter_stack add type d        |
-| `.f`  | filter_stack add type f        |
-| `.l`  | filter_stack add type l        |
-| `.m`  | console filter_stack add mime%space |
-| `.n`  | console filter_stack add name%space |
-| `.#`  | console filter_stack add hash%space |
-| `."`  | filter_stack add duplicate     |
-| `.'`  | filter_stack add unique        |
-| `.&`  | filter_stack add and           |
-| `.!`  | filter_stack add not           |
-| `.r`  | filter_stack rotate            |
-| `.c`  | filter_stack clear             |
-| `.*`  | filter_stack decompose         |
-| `.p`  | filter_stack pop               |
-| `..`  | filter_stack show              |
+| Key    | Meaning                       | Comment                        |
+|--------|-------------------------------|--------------------------------|
+| `zf`   | console filter%space          | Filter string                  |
+| `zp`   | set preview_files!            |                                |
+| `zi`   | set preview_images!           |                                |
+| `zc`   | set collapse_preview!         |                                |
+| `zd`   | set sort_directories_first!   |                                |
+| `
 
 ## install script details
 

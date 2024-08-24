@@ -221,24 +221,54 @@ class shell_(Command):
         self.fm.run(f'zsh -i -c "source ~/.zshrc && {self.rest(1)} & disown"')
 
 
+# class mount_drive(Command):
+#     def execute(self):
+#         # Step 1: Use fzf to let the user select a drive letter (D, E, F), accepting both upper and lower-case input
+#         drive_options = "d\ne\nf\nD\nE\nF"
+#         fzf_command = "fzf --prompt='Select drive letter: ' --height=10 --border --ansi"
+#         selected_drive = subprocess.getoutput(f"echo -e '{drive_options}' | {fzf_command}").strip().upper()
+
+#         if not selected_drive:
+#             self.fm.notify("No drive letter selected. Aborting operation.", bad=True)
+#             self.fm.reload_cwd()
+#             return
+
+#         # Step 2: Mount the selected drive (automatically handling lower-case input by converting it to upper-case)
+#         mount_command = f"sudo mount -t drvfs {selected_drive}: /mnt/{selected_drive.lower()}"
+#         mount_result = subprocess.run(mount_command, shell=True)
+
+#         if mount_result.returncode != 0:
+#             self.fm.notify(f"Failed to mount {selected_drive}: Aborting operation.", bad=True)
+#             return
+
+#         # Step 3: Reload the directory view to show the mounted drive
+#         self.fm.notify(f"Successfully mounted {selected_drive}: to /mnt/{selected_drive.lower()}", bad=False)
+#         self.fm.reload_cwd()
+        
 class mount_drive(Command):
     def execute(self):
-        # Prompt the user for the drive letter
-        self.fm.ui.console.ask("Enter the windows drive letter to mount (e.g., G): ", self._mount_drive)
+        # Step 1: Use fzf to let the user select a drive letter (D, E, F), allowing input in any case
+        drive_options = "D\nE\nF"
+        fzf_command = "fzf --prompt='Select drive letter: ' --height=10 --border --ansi --expect=d,e,f"
 
-    def _mount_drive(self, letter):
-        # Clean and validate the user input
-        letter = letter.strip().upper()
+        selected_drive = subprocess.getoutput(f"echo '{drive_options}' | {fzf_command}").strip().upper()
 
-        if len(letter) != 1 or not letter.isalpha():
-            self.fm.notify("Invalid drive letter!", bad=True)
+        if not selected_drive:
+            self.fm.notify("No drive letter selected. Aborting operation.", bad=True)
+            self.fm.reload_cwd()
             return
 
-        # Construct the mount command
-        command = f"sudo mount -t drvfs {letter}: /mnt/{letter.lower()}"
+        # Step 2: Mount the selected drive
+        mount_command = f"sudo mount -t drvfs {selected_drive}: /mnt/{selected_drive.lower()}"
+        mount_result = subprocess.run(mount_command, shell=True)
 
-        # Execute the command
-        self.fm.run(command, shell=True)
+        if mount_result.returncode != 0:
+            self.fm.notify(f"Failed to mount {selected_drive}: Aborting operation.", bad=True)
+            self.fm.reload_cwd()
+            return
 
-        # Notify the user of the completed mount
-        self.fm.notify(f"Mounted {letter}: to /mnt/{letter.lower()}", bad=False)
+        # Step 3: Reload the directory view to show the mounted drive
+        self.fm.notify(f"Successfully mounted {selected_drive}: to /mnt/{selected_drive.lower()}", bad=False)
+        self.fm.reload_cwd()
+
+
